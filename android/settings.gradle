@@ -10,9 +10,18 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
+        maven { 
+            allowInsecureProtocol = true
+            url 'https://maven.aliyun.com/repository/google' }
+        maven { 
+            allowInsecureProtocol = true
+            url 'https://maven.aliyun.com/repository/central' }
+        maven { 
+            allowInsecureProtocol = true
+            url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        // google()
+        // mavenCentral()
+        // gradlePluginPortal()
     }
 }
 

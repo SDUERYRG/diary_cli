@@ -14,40 +14,22 @@ class _RegisterPageState extends State<RegisterPage> {
   String _account = '';
   String _password = '';
   String _confirmPassword = '';
-  String _power = 'user'; // 默认用户权限
+  String _power = '用户'; // 默认用户权限
   String _email = '';
   String _verificationCode = '';
   String _regTime = '';
 
   Future<void> _sendCode() async {
     final Uri uri =
-        Uri.parse('http://localhost:4001/diary-server/sendMail/$_email');
+        Uri.parse('http://192.168.1.5:4001/diary-server/sendMail/$_email');
     // Uri.parse('http://localhost:4001/flower_shop/sendMail/$_email');
-    // final response = await http.post(
-    //   'http://localhost:4001/diary-sever/sendMail/$_email',
-    //   body: jsonEncode(<String, String>{
-    //     'email': _email,
-    //   }),
-    // );
     final response = await http.get(uri);
     print(response.body);
-    // if (response.statusCode == 200) {
-
-    // } else {
-    //   print('验证码发送失败');
-    // }
   }
 
-  // Future<void> _register() async {
-  //   final Uri uri =
-  //       Uri.parse('http://localhost:4001/diary-server/userRegister');
-
-  //   final response = await http.post(uri);
-  //   print(response.body);
-  // }
   static Future<void> _register(String name, String account, String email,
       String password, String code, String power, String regTime) async {
-    final url = Uri.parse('http://localhost:4001/diary-server/userRegister');
+    final url = Uri.parse('http://192.168.1.5:4001/diary-server/userRegister');
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -175,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage> {
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(labelText: '用户权限'),
                 value: _power,
-                items: <String>['user', 'admin'].map((String value) {
+                items: <String>['用户', '管理员'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -183,7 +165,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    _power = 'user';
+                    _power = '用户';
                   });
                 },
               ),
@@ -191,12 +173,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    // 处理注册逻辑
-                    // print('Account: $_account');
-                    // print('Password: $_password');
-                    // print('User Role: $_userRole');
-                    // print('Email: $_email');
-                    // print('Verification Code: $_verificationCode');
                     _regTime = DateTime.now().toString();
                     _register(_userName, _account, _email, _password,
                         _verificationCode, _power, _regTime);
