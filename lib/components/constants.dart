@@ -20,6 +20,9 @@ enum ColorSelectionMethod {
   image,
 }
 
+const secondaryColor = Color(0xFF2A2D3E);
+const bgColor = Color(0xFF212332);
+
 enum ColorSeed {
   baseColor('M3 Baseline', Color(0xff6750a4)),
   indigo('Indigo', Colors.indigo),
