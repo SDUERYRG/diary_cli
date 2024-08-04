@@ -1,4 +1,5 @@
 class User {
+  final String userId;
   final String userName;
   final String account;
   final String email;
@@ -7,6 +8,7 @@ class User {
   final String? txPicture;
 
   User({
+    required this.userId,
     required this.userName,
     required this.account,
     required this.email,
@@ -17,6 +19,7 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
+      userId: json['userId'],
       userName: json['userName'],
       account: json['account'],
       power: json['power'],
