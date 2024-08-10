@@ -505,20 +505,6 @@ class _UserManagePageState extends State<UserManagePage> {
     );
   }
 
-  // Future<void> fetchUsers(int current, int pageSize) async {
-  //   final url = Uri.parse(
-  //       'http://192.168.1.5:4001/diary-server/all/$current/$pageSize');
-  //   final response = await http.get(url);
-
-  //   if (response.statusCode == 200) {
-  //     final responseBody = jsonDecode(response.body);
-  //     // 处理响应数据
-  //     print(response.body);
-  //     print('查询成功: ${responseBody['data']}');
-  //   } else {
-  //     print('查询失败: ${response.body}');
-  //   }
-  // }
   Future<List<User>> fetchAllUsers(int current, int pageSize) async {
     final url = Uri.parse(
         'http://192.168.1.5:4001/diary-server/all/$current/$pageSize');

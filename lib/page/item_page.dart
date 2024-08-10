@@ -160,7 +160,13 @@ class _ItemPageState extends State<ItemPage> {
                                 DataCell(Text(item.itemId)),
                                 DataCell(Text(item.itemName)),
                                 DataCell(item.picture != null
-                                    ? Image.network(item.picture!)
+                                    ? Image.file(
+                                        File(
+                                            'D:/photos/itemImg/${item.picture!}'),
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.contain,
+                                      )
                                     : const Text('N/A')),
                                 DataCell(Text(item.stock.toString())),
                                 DataCell(Text(item.description)),
