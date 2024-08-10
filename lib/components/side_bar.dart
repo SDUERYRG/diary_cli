@@ -103,20 +103,6 @@ class _SideBarState extends State<SideBar> {
   }
 }
 
-enum SelectedScreen {
-  user(0),
-  transaction(1);
-  // task(2),
-  // documents(3),
-  // store(4),
-  // notification(5),
-  // profile(6),
-  // settings(7);
-
-  const SelectedScreen(this.value);
-  final int value;
-}
-
 class DrawerListTile extends StatelessWidget {
   const DrawerListTile({
     Key? key,

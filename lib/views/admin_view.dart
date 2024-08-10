@@ -1,5 +1,6 @@
 import 'package:diary_cli/components/side_bar.dart';
 import 'package:diary_cli/controller/MenuController.dart' as prefix0;
+import 'package:diary_cli/page/item_page.dart';
 import 'package:diary_cli/page/user_manage_page.dart';
 import 'package:diary_cli/responsive.dart';
 import 'package:flutter/material.dart';
@@ -82,8 +83,10 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       case SelectedScreen.user:
         // return Text("人员管理1");
         return UserManagePage();
-      case SelectedScreen.transaction:
-        return Text("Transaction");
+      case SelectedScreen.item:
+        return ItemPage();
+      case SelectedScreen.cart:
+        return Text("Cart");
     }
   }
 
@@ -262,16 +265,21 @@ class _NavigationTransitionState extends State<NavigationTransition> {
 
 const List<NavigationDestination> appBarDestinations = [
   NavigationDestination(
+      tooltip: '',
+      icon: Icon(Icons.contacts_outlined),
+      label: '用户管理',
+      selectedIcon: Icon(Icons.contacts_rounded)),
+  NavigationDestination(
     tooltip: '',
-    icon: Icon(Icons.invert_colors_on_outlined),
-    label: '我的数据结构课设',
-    selectedIcon: Icon(Icons.opacity),
+    icon: Icon(Icons.local_mall_outlined),
+    label: '商品管理',
+    selectedIcon: Icon(Icons.local_mall_rounded),
   ),
   NavigationDestination(
     tooltip: '',
-    icon: Icon(Icons.text_snippet_outlined),
-    label: 'Typography',
-    selectedIcon: Icon(Icons.text_snippet),
+    icon: Icon(Icons.shopping_cart_outlined),
+    label: '购物车管理',
+    selectedIcon: Icon(Icons.shopping_cart_rounded),
   ),
 ];
 final List<NavigationRailDestination> navRailDestinations = appBarDestinations
