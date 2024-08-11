@@ -13,6 +13,7 @@ class _RegisterPageState extends State<RegisterPage> {
   String _userName = '';
   String _account = '';
   String _password = '';
+  // ignore: unused_field
   String _confirmPassword = '';
   String _power = '用户'; // 默认用户权限
   String _email = '';

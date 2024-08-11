@@ -1,5 +1,6 @@
 import 'package:diary_cli/views/admin_view.dart';
 import 'package:flutter/material.dart';
+// ignore: unused_import
 import 'package:http/http.dart' as http;
 
 class MainPage extends StatefulWidget {

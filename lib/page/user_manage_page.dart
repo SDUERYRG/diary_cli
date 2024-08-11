@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/User.dart';
@@ -19,6 +20,7 @@ class _UserManagePageState extends State<UserManagePage> {
   String _account = '';
   String _password = '';
   String _power = '用户'; // 默认用户权限
+  // ignore: unused_field
   String _confirmPassword = '';
   String _email = '';
   String _regTime = DateTime.now().toString();
@@ -330,8 +332,32 @@ class _UserManagePageState extends State<UserManagePage> {
                                 DataCell(Text(user.power)),
                                 DataCell(Text(user.sex ?? 'N/A')),
                                 DataCell(user.txPicture != null
-                                    ? Image.network(user.txPicture!)
-                                    : const Text('N/A')),
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return Dialog(
+                                                  child: Container(
+                                                    width: 600,
+                                                    height: 600,
+                                                    child: Image.file(
+                                                      File(
+                                                          'D:/photos/txImg/${user.txPicture}'),
+                                                      fit: BoxFit.contain,
+                                                    ),
+                                                  ),
+                                                );
+                                              });
+                                        },
+                                        child: Image.file(
+                                          File(
+                                              'D:/photos/txImg/${user.txPicture}'),
+                                          width: 50,
+                                          height: 50,
+                                        ),
+                                      )
+                                    : Text("N/A")),
                                 DataCell(Row(
                                   children: [
                                     ElevatedButton(
@@ -509,7 +535,7 @@ class _UserManagePageState extends State<UserManagePage> {
     final url = Uri.parse(
         'http://192.168.1.5:4001/diary-server/all/$current/$pageSize');
     final response = await http.get(url);
-
+    // print(response.body);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data']['records'];

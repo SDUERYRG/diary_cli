@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:diary_cli/entity/Item.dart';
 import 'package:diary_cli/components/constants.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -17,7 +16,6 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage> {
   late Future<List<Item>> futureItems;
-  String _searchItem = '';
   String _itemId = '';
   String _itemName = '';
   String _picture = '';
@@ -26,6 +24,8 @@ class _ItemPageState extends State<ItemPage> {
   int _sell = 0;
   double _price = 0.0;
   double _discount = 1;
+  int itemNum = 0;
+  String _searchKeyword = '';
 
   //文件相关
   String? _fileName;
@@ -42,6 +42,7 @@ class _ItemPageState extends State<ItemPage> {
   String? _saveAsFileName;
   String newFilePath = 'D:/photos/itemImg/photo1.png';
   File? file1;
+  String _path = '';
   @override
   void initState() {
     super.initState();
@@ -95,6 +96,8 @@ class _ItemPageState extends State<ItemPage> {
                       return Center(child: Text('查询失败: ${snapshot.error}'));
                     } else {
                       final items = snapshot.data!;
+                      this.itemNum = items.length;
+                      print(itemNum);
                       return Column(
                         children: [
                           Row(
@@ -108,10 +111,10 @@ class _ItemPageState extends State<ItemPage> {
                               Expanded(
                                 flex: 4,
                                 child: TextFormField(
-                                  initialValue: _searchItem,
+                                  initialValue: _searchKeyword,
                                   onChanged: (value) {
                                     setState(() {
-                                      _searchItem = value;
+                                      _searchKeyword = value;
                                     });
                                   },
                                   decoration: const InputDecoration(
@@ -125,7 +128,9 @@ class _ItemPageState extends State<ItemPage> {
                                 child: ElevatedButton(
                                     onPressed: () {
                                       setState(() {
-                                        futureItems = fetchAllItems(1, 10);
+                                        futureItems = _searchKeyword == ''
+                                            ? fetchAllItems(1, 10)
+                                            : fetchItem(_searchKeyword, 1, 10);
                                       });
                                     },
                                     child: const Text("查询")),
@@ -146,7 +151,7 @@ class _ItemPageState extends State<ItemPage> {
                             columns: const [
                               DataColumn(label: Text("商品ID")),
                               DataColumn(label: Text("商品名")),
-                              DataColumn(label: Text("图片")),
+                              DataColumn(label: Text("     图片")),
                               DataColumn(label: Text("库存")),
                               DataColumn(label: Text("描述")),
                               DataColumn(label: Text("销量")),
@@ -160,12 +165,32 @@ class _ItemPageState extends State<ItemPage> {
                                 DataCell(Text(item.itemId)),
                                 DataCell(Text(item.itemName)),
                                 DataCell(item.picture != null
-                                    ? Image.file(
-                                        File(
-                                            'D:/photos/itemImg/${item.picture!}'),
-                                        width: 70,
-                                        height: 70,
-                                        fit: BoxFit.contain,
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return Dialog(
+                                                child: Container(
+                                                  width: 800,
+                                                  height: 600,
+                                                  child: Image.file(
+                                                    File(
+                                                        'D:/photos/itemImg/${item.picture!}'),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: Image.file(
+                                          File(
+                                              'D:/photos/itemImg/${item.picture!}'),
+                                          width: 70,
+                                          height: 70,
+                                          fit: BoxFit.contain,
+                                        ),
                                       )
                                     : const Text('N/A')),
                                 DataCell(Text(item.stock.toString())),
@@ -202,6 +227,21 @@ class _ItemPageState extends State<ItemPage> {
                                           }
                                         },
                                         child: const Text("删除")),
+                                    ElevatedButton(
+                                      child: Text("修改"),
+                                      onPressed: () async {
+                                        _itemId = item.itemId;
+                                        _itemName = item.itemName;
+                                        _picture = item.picture!;
+                                        _stock = item.stock;
+                                        _description = item.description;
+                                        _sell = item.sell;
+                                        _price = item.price;
+                                        _discount = item.discount;
+                                        showUpdateDialog(
+                                            item, context, 'content');
+                                      },
+                                    )
                                   ],
                                 ))
                               ]);
@@ -214,6 +254,26 @@ class _ItemPageState extends State<ItemPage> {
         ],
       ),
     );
+  }
+
+  Future<List<Item>> fetchItem(
+      String keyword, int current, int pageSize) async {
+    // final url = Uri.parse(
+    //     'http://192.168.1.5:4001/diary-server/item/search/$current/$pageSize');
+    // final response = await http.get(url, body: {'keyword': keyword});
+    final queryParameters = {
+      'keyword': keyword,
+    };
+    final url = Uri.http('192.168.1.5:4001',
+        '/diary-server/item/search/$current/$pageSize', queryParameters);
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      final List<dynamic> data = responseBody['data']['records'];
+      return data.map((json) => Item.fromJson(json)).toList();
+    } else {
+      throw Exception('查询失败: ${response.body}');
+    }
   }
 
   Future<List<Item>> fetchAllItems(int current, int pageSize) async {
@@ -285,16 +345,79 @@ class _ItemPageState extends State<ItemPage> {
     });
     if (_paths != null && _paths!.isNotEmpty) {
       print('Selected file path: ${_paths!.first.path}');
-      final String path1 = _paths!.first.path!;
-      this.file1 = File(path1);
+      this._path = _paths!.first.path!;
+      this.file1 = File(this._path);
       // final Uint8List content = await this.file1!.readAsBytes();
       // print(content);
       // File newFile = File(newFilePath);
       // await newFile.writeAsBytes(content);
-      return File(path1);
+      return File(this._path);
     } else {
       print('No file selected');
       return File('');
+    }
+  }
+
+  Future<void> addItem(File file) async {
+    _itemId = (itemNum + 1).toString();
+    var request = http.MultipartRequest(
+        'POST', Uri.parse('http://192.168.1.5:4001/diary-server/item'));
+
+    // 添加文件
+    request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    // 添加其他字段
+    request.fields['itemId'] = _itemId;
+    request.fields['itemName'] = _itemName;
+    request.fields['picture'] = _picture;
+    request.fields['stock'] = _stock.toString();
+    request.fields['description'] = _description;
+    request.fields['sell'] = _sell.toString();
+    request.fields['price'] = _price.toString();
+    request.fields['discount'] = _discount.toString();
+
+    try {
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        // 处理成功响应
+        final responseData = await response.stream.toBytes();
+        final responseString = String.fromCharCodes(responseData);
+        final jsonResponse = json.decode(responseString);
+        print('Response: $jsonResponse');
+      } else {
+        // 处理错误响应
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception: $e');
+    }
+  }
+
+  Future<void> updateItem(Item item, File file) async {
+    var request = http.MultipartRequest('PUT',
+        Uri.parse('http://192.168.1.5:4001/diary-server/item/updateItem'));
+    request.files.add(await http.MultipartFile.fromPath('file', _path));
+    request.fields['itemId'] = item.itemId;
+    request.fields['itemName'] = _itemName;
+    request.fields['picture'] = item.picture!;
+    request.fields['stock'] = _stock.toString();
+    request.fields['description'] = _description;
+    request.fields['sell'] = _sell.toString();
+    request.fields['price'] = _price.toString();
+    request.fields['discount'] = _discount.toString();
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        final responseData = await response.stream.toBytes();
+        final responseString = String.fromCharCodes(responseData);
+        final jsonResponse = json.decode(responseString);
+        print('Response: $jsonResponse');
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Exception: $e');
     }
   }
 
@@ -310,108 +433,183 @@ class _ItemPageState extends State<ItemPage> {
                 child: Dialog(
                   child: Column(
                     children: [
-                      // Padding(
-                      //     padding: const EdgeInsets.all(20.0),
-                      //     child: Text(
-                      //       title,
-                      //       style: const TextStyle(fontSize: 20),
-                      //     )),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _itemName = value;
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品名称",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _description = value;
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品描述",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _price = double.parse(value);
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品价格",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _stock = int.parse(value);
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品库存",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _discount = double.parse(value);
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品折扣",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
-                      // Padding(
-                      //   padding:
-                      //       const EdgeInsets.only(left: 20, right: 20, top: 10),
-                      //   child: TextFormField(
-                      //     onChanged: (value) {
-                      //       setState(() {
-                      //         _picture = value;
-                      //       });
-                      //     },
-                      //     decoration: const InputDecoration(
-                      //       labelText: "商品图片",
-                      //       border: OutlineInputBorder(),
-                      //     ),
-                      //   ),
-                      // ),
+                      Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Text(
+                            title,
+                            style: const TextStyle(fontSize: 20),
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  flex: 1,
+                                  child: Text("商品名称:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _itemName = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                const Expanded(
+                                  flex: 1,
+                                  child: Text("商品描述:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _description = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        child: Container(
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                flex: 1,
+                                child: Text("商品价格:",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _price = double.parse(value);
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        child: Container(
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                flex: 1,
+                                child: Text("商品库存:",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _stock = int.parse(value);
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            const EdgeInsets.only(left: 20, right: 20, top: 10),
+                        child: Container(
+                          child: Row(
+                            children: [
+                              const Expanded(
+                                flex: 1,
+                                child: Text("商品销量:",
+                                    style: TextStyle(fontSize: 16)),
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: TextFormField(
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _sell = int.parse(value);
+                                    });
+                                  },
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child: Text("商品图片：",
+                                        style: TextStyle(fontSize: 16))),
+                                Expanded(
+                                  flex: 2,
+                                  child:
+                                      Builder(builder: (BuildContext context) {
+                                    if (_path != '') {
+                                      return Image.file(
+                                        File(_path),
+                                        width: 70,
+                                        height: 70,
+                                        fit: BoxFit.contain,
+                                      );
+                                    } else {
+                                      return const Text('');
+                                    }
+                                  }),
+                                )
+                              ],
+                            ),
+                          )),
                       ElevatedButton(
-                        child: Text("上传图片"),
+                        child: const Text("选择图片"),
                         onPressed: () async {
                           state(() {
                             _pickFiles(state);
                           });
+                        },
+                      ),
+                      ElevatedButton(
+                        child: Text("确认添加"),
+                        onPressed: () async {
+                          // print(this.itemNum);
+                          newFilePath =
+                              'D:/photos/itemImg/photo${itemNum + 1}.png';
+                          final Uint8List content =
+                              await this.file1!.readAsBytes();
+                          File newFile = File(newFilePath);
+                          await newFile.writeAsBytes(content);
+                          await addItem(file1!);
+                          // Navigator.of(context).pop();
                         },
                       ),
                       Builder(builder: (BuildContext context) {
@@ -419,7 +617,7 @@ class _ItemPageState extends State<ItemPage> {
                           return const Center(
                               child: CircularProgressIndicator());
                         } else {
-                          return Text("data");
+                          return Text("");
                         }
                       }),
                     ],
@@ -428,6 +626,226 @@ class _ItemPageState extends State<ItemPage> {
               ),
             );
           });
+        });
+  }
+
+  Future<void> showUpdateDialog(
+      Item item, BuildContext context, String content) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return UnconstrainedBox(
+                child: SizedBox(
+                  width: 500,
+                  child: Dialog(
+                    child: Column(
+                      children: [
+                        Padding(
+                            padding: EdgeInsets.all(20.0),
+                            child: Text(
+                              "修改商品",
+                              style: TextStyle(fontSize: 20),
+                            )),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("商品名称:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    initialValue: item.itemName,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _itemName = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("商品描述:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    initialValue: item.description,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        _description = value;
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("商品价格:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    initialValue: item.price.toString(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == '') {
+                                          _price = 0.0;
+                                        } else
+                                          _price = double.parse(value);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("商品库存:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    initialValue: item.stock.toString(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == '') {
+                                          _stock = 0;
+                                        } else
+                                          _stock = int.parse(value);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 10),
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Text("商品销量:",
+                                      style: TextStyle(fontSize: 16)),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    initialValue: item.sell.toString(),
+                                    onChanged: (value) {
+                                      setState(() {
+                                        if (value == '') {
+                                          _sell = 0;
+                                        } else
+                                          _sell = int.parse(value);
+                                      });
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                left: 20, right: 20, top: 10),
+                            child: Container(
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                      child: Text("商品图片：",
+                                          style: TextStyle(fontSize: 16))),
+                                  Expanded(
+                                    flex: 4,
+                                    child: Builder(
+                                        builder: (BuildContext context) {
+                                      _path =
+                                          'D:/photos/itemImg/${item.picture}';
+                                      if (_path != '') {
+                                        return Image.file(
+                                          File(_path),
+                                          width: 70,
+                                          height: 70,
+                                          fit: BoxFit.contain,
+                                        );
+                                      } else {
+                                        return const Text('');
+                                      }
+                                    }),
+                                  )
+                                ],
+                              ),
+                            )),
+                        ElevatedButton(
+                          child: const Text("选择图片"),
+                          onPressed: () async {
+                            setState(() {
+                              _pickFiles(setState);
+                            });
+                          },
+                        ),
+                        ElevatedButton(
+                          child: Text("确认修改"),
+                          onPressed: () async {
+                            file1 ??= File(_path);
+                            newFilePath =
+                                'D:/photos/itemImg/photo${itemNum + 1}.png';
+                            final Uint8List content =
+                                await this.file1!.readAsBytes();
+                            File newFile = File(newFilePath);
+                            await newFile.writeAsBytes(content);
+                            await updateItem(item, file1!);
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
         });
   }
 }

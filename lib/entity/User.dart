@@ -25,7 +25,7 @@ class User {
       power: json['power'],
       email: json['email'],
       sex: json['sex'],
-      txPicture: json['tx_picture'],
+      txPicture: json['txPicture'],
     );
   }
 }

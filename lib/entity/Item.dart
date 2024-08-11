@@ -11,9 +11,9 @@ class Item {
 
   //数据库中没有的字段
   final String? orderNum;
-  final bool rxFlag;
-  final bool xpFlag;
-  final bool tjFlag;
+  final bool? rxFlag;
+  final bool? xpFlag;
+  final bool? tjFlag;
   final String? shoppingCartId;
   // final List<Evaluate> evaluateList;
 
@@ -28,9 +28,9 @@ class Item {
     required this.discount,
     this.score,
     this.orderNum,
-    required this.rxFlag,
-    required this.xpFlag,
-    required this.tjFlag,
+    this.rxFlag,
+    this.xpFlag,
+    this.tjFlag,
     this.shoppingCartId,
     // required this.evaluateList,
   });

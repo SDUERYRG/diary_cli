@@ -1,10 +1,6 @@
-import 'package:diary_cli/components/side_bar.dart';
-import 'package:diary_cli/controller/MenuController.dart' as prefix0;
 import 'package:diary_cli/page/item_page.dart';
 import 'package:diary_cli/page/user_manage_page.dart';
-import 'package:diary_cli/responsive.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:diary_cli/components/constants.dart';
 
 class Home extends StatefulWidget {
