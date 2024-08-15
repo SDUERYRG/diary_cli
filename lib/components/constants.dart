@@ -61,13 +61,8 @@ enum ColorImageProvider {
 enum SelectedScreen {
   user(0),
   item(1),
-  cart(2);
-  // task(2),
-  // documents(3),
-  // store(4),
-  // notification(5),
-  // profile(6),
-  // settings(7);
+  cart(2),
+  orders(3);
 
   const SelectedScreen(this.value);
   final int value;
