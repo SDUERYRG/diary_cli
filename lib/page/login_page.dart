@@ -21,9 +21,9 @@ class _LoginPageState extends State<LoginPage> {
   late String _password, _account;
 
   //SharedPreferences保存token
-  Future<void> saveToken(String token) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('auth_token', token);
+  _saveToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('token', token);
   }
 
   //sharedPreferences获取token
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       final token = responseBody['message'];
-      await saveToken(token); // 存储token
+      await _saveToken(token); // 存储token
       print('登录成功:${token}');
 
       Navigator.pushReplacement(
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
       if (response.statusCode == 200) {
         final responseBody = jsonDecode(response.body);
         final token = responseBody['message'];
-        await saveToken(token); // 存储token
+        await _saveToken(token); // 存储token
         print('登录成功:${token}');
 
         Navigator.pushReplacement(

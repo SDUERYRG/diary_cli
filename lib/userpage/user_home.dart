@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget {
   const UserHome({
@@ -19,11 +22,14 @@ class _UserHomeState extends State<UserHome>
   bool controllerInitialized = false;
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
+  late String _token;
 
   int screenIndex = UserSelectedScreen.pet.value;
   @override
   initState() {
     super.initState();
+
+    _loadToken();
     controller = AnimationController(
       duration: Duration(milliseconds: transitionLength.toInt() * 3),
       value: 0,
@@ -38,6 +44,13 @@ class _UserHomeState extends State<UserHome>
   void handleScreenChanged(int screenSelected) {
     setState(() {
       screenIndex = screenSelected;
+    });
+  }
+
+  _loadToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _token = prefs.getString('token') ?? '';
     });
   }
 
@@ -130,7 +143,7 @@ class _NavigationBarsState extends State<NavigationBars> {
   Widget build(BuildContext context) {
     Widget navigationBar = Focus(
       child: NavigationBar(
-        backgroundColor: Color(0xFFF2F2F2),
+        backgroundColor: FlutterFlowTheme.of(context).nav,
         indicatorColor: FlutterFlowTheme.of(context).navBackground,
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) {
@@ -197,7 +210,7 @@ class _NavigationTransitionState extends State<NavigationTransition> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: widget.scaffoldKey,
-      backgroundColor: Colors.white, // 设置背景颜色为蓝色
+      backgroundColor: FlutterFlowTheme.of(context).alternate, // 设置背景颜色为蓝色
       body: Row(
         children: <Widget>[
           Container(
@@ -229,23 +242,23 @@ const List<NavigationDestination> appBarDestinations = [
   NavigationDestination(
       tooltip: '',
       icon: Icon(Icons.contacts_outlined),
-      label: '用户管理',
+      label: '主页',
       selectedIcon: Icon(Icons.contacts_rounded)),
   NavigationDestination(
     tooltip: '',
     icon: Icon(Icons.local_mall_outlined),
-    label: '商品管理',
+    label: '分类',
     selectedIcon: Icon(Icons.local_mall_rounded),
   ),
   NavigationDestination(
     tooltip: '',
     icon: Icon(Icons.shopping_cart_outlined),
-    label: '购物车管理',
+    label: '购物车',
     selectedIcon: Icon(Icons.shopping_cart_rounded),
   ),
   NavigationDestination(
     icon: Icon(Icons.feed_outlined),
-    label: '订单管理',
+    label: '我的',
     tooltip: '',
     selectedIcon: Icon(Icons.feed_rounded),
   )

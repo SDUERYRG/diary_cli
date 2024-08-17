@@ -37,6 +37,7 @@ abstract class FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
+  late Color nav;
   late Color navBackground;
   late Color primary;
   late Color secondary;
@@ -126,6 +127,7 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
+  late Color nav = Color(0xFFF2F2F2);
   late Color navBackground = Color.fromARGB(91, 178, 255, 89);
   late Color primary = const Color(0xFF86C144);
   late Color secondary = const Color(0xFF426A20);
@@ -297,7 +299,8 @@ class DarkModeTheme extends FlutterFlowTheme {
   Color get secondaryColor => secondary;
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
-
+  late Color nav = Color.fromARGB(255, 68, 97, 34);
+  late Color navBackground = Color.fromARGB(91, 178, 255, 89);
   late Color primary = const Color(0xFF86C144);
   late Color secondary = const Color(0xFF426A20);
   late Color tertiary = const Color(0xFFD5EEBA);
