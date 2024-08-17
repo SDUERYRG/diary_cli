@@ -5,6 +5,9 @@ import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../SharedPre.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -19,16 +22,23 @@ class _CartPageState extends State<CartPage> {
   int cartNum = 0;
   String _searchByUser = '';
   String _searchByItem = '';
+  String? _token;
   @override
   void initState() {
     super.initState();
-    futureCart = fetchAllCart(1, 10);
+    _token = SharedPre.getToken();
+    futureCart = fetchAllCart(1, 10,_token);
   }
-
-  Future<List<ShoppingCart>> fetchAllCart(int current, int pageSize) async {
+  Future<List<ShoppingCart>> fetchAllCart(int current, int pageSize, String? token) async {
+    print('token : $_token');
     final url = Uri.parse(
         'http://192.168.1.5:4001/diary-server/shoppingCart/$current/$pageSize');
-    final response = await http.get(url);
+    final response = await http.get(
+      url,
+      headers: {
+        'token': _token.toString(), // 将 token 放入请求头中
+      },
+    );
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       final List<dynamic> data = responseBody['data']['records'];
@@ -37,6 +47,18 @@ class _CartPageState extends State<CartPage> {
       throw Exception('查询失败: ${response.body}');
     }
   }
+  // Future<List<ShoppingCart>> fetchAllCart(int current, int pageSize) async {
+  //   final url = Uri.parse(
+  //       'http://192.168.1.5:4001/diary-server/shoppingCart/$current/$pageSize');
+  //   final response = await http.get(url);
+  //   if (response.statusCode == 200) {
+  //     final responseBody = jsonDecode(response.body);
+  //     final List<dynamic> data = responseBody['data']['records'];
+  //     return data.map((json) => ShoppingCart.fromJson(json)).toList();
+  //   } else {
+  //     throw Exception('查询失败: ${response.body}');
+  //   }
+  // }
 
   Future<List<ShoppingCart>> fetchUserCart(
       int current, int pageSize, String userName) async {
@@ -190,7 +212,7 @@ class _CartPageState extends State<CartPage> {
                                             : _searchByItem != ''
                                                 ? fetchItemCart(
                                                     1, 10, _searchByItem)
-                                                : fetchAllCart(1, 10);
+                                                : fetchAllCart(1, 10,_token);
                                       });
                                     },
                                     child: const Text("查询")),
