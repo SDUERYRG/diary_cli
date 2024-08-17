@@ -19,9 +19,9 @@ pluginManagement {
         maven { 
             allowInsecureProtocol = true
             url 'https://maven.aliyun.com/repository/gradle-plugin' }
-        // google()
-        // mavenCentral()
-        // gradlePluginPortal()
+         google()
+         mavenCentral()
+         gradlePluginPortal()
     }
 }
 

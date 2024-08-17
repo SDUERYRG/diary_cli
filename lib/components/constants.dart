@@ -39,25 +39,6 @@ enum ColorSeed {
   final Color color;
 }
 
-enum ColorImageProvider {
-  leaves('Leaves',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_1.png'),
-  peonies('Peonies',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_2.png'),
-  bubbles('Bubbles',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_3.png'),
-  seaweed('Seaweed',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_4.png'),
-  seagrapes('Sea Grapes',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_5.png'),
-  petals('Petals',
-      'https://flutter.github.io/assets-for-api-docs/assets/material/content_based_color_scheme_6.png');
-
-  const ColorImageProvider(this.label, this.url);
-  final String label;
-  final String url;
-}
-
 enum SelectedScreen {
   user(0),
   item(1),
@@ -67,3 +48,4 @@ enum SelectedScreen {
   const SelectedScreen(this.value);
   final int value;
 }
+
