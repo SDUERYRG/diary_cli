@@ -27,9 +27,11 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     _token = SharedPre.getToken();
-    futureCart = fetchAllCart(1, 10,_token);
+    futureCart = fetchAllCart(1, 10, _token);
   }
-  Future<List<ShoppingCart>> fetchAllCart(int current, int pageSize, String? token) async {
+
+  Future<List<ShoppingCart>> fetchAllCart(
+      int current, int pageSize, String? token) async {
     print('token : $_token');
     final url = Uri.parse(
         'http://192.168.1.5:4001/diary-server/shoppingCart/$current/$pageSize');
@@ -47,18 +49,6 @@ class _CartPageState extends State<CartPage> {
       throw Exception('查询失败: ${response.body}');
     }
   }
-  // Future<List<ShoppingCart>> fetchAllCart(int current, int pageSize) async {
-  //   final url = Uri.parse(
-  //       'http://192.168.1.5:4001/diary-server/shoppingCart/$current/$pageSize');
-  //   final response = await http.get(url);
-  //   if (response.statusCode == 200) {
-  //     final responseBody = jsonDecode(response.body);
-  //     final List<dynamic> data = responseBody['data']['records'];
-  //     return data.map((json) => ShoppingCart.fromJson(json)).toList();
-  //   } else {
-  //     throw Exception('查询失败: ${response.body}');
-  //   }
-  // }
 
   Future<List<ShoppingCart>> fetchUserCart(
       int current, int pageSize, String userName) async {
@@ -212,7 +202,7 @@ class _CartPageState extends State<CartPage> {
                                             : _searchByItem != ''
                                                 ? fetchItemCart(
                                                     1, 10, _searchByItem)
-                                                : fetchAllCart(1, 10,_token);
+                                                : fetchAllCart(1, 10, _token);
                                       });
                                     },
                                     child: const Text("查询")),
@@ -228,6 +218,7 @@ class _CartPageState extends State<CartPage> {
                               DataColumn(label: Text("用户ID")),
                               DataColumn(label: Text("用户名")),
                               DataColumn(label: Text("数量")),
+                              DataColumn(label: Text("价格")),
                               DataColumn(label: Text("     操作")),
                             ],
                             rows: List.generate(carts.length, (index) {
@@ -269,6 +260,7 @@ class _CartPageState extends State<CartPage> {
                                 DataCell(Text(cart.userId)),
                                 DataCell(Text(cart.userName)),
                                 DataCell(Text(cart.quantity.toString())),
+                                DataCell(Text(cart.price.toString())),
                                 DataCell(Row(
                                   children: [
                                     ElevatedButton(

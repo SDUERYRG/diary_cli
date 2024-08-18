@@ -4,14 +4,14 @@ import 'package:diary_cli/page/main_page.dart';
 import 'package:diary_cli/userpage/MainPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:diary_cli/responsive.dart';
 
 import '../SharedPre.dart';
 import '../components/button.dart';
 import '../components/flutter_flow_theme.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -20,14 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   String _power = '用户';
   late String _password, _account;
-
-  // //SharedPreferences保存token
-  // _saveToken(String token) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('token', token);
-  // }
-
-
 
   Future<void> _login(String account, String password) async {
     final url = Uri.parse('http://192.168.1.5:4001/diary-server/login');
@@ -44,7 +36,9 @@ class _LoginPageState extends State<LoginPage> {
     );
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
+      final name = responseBody['data']['userName'];
       final token = responseBody['message'];
+      SharedPre.setName(name); // 存储name
       SharedPre.saveToken(token); // 存储token
       print('登录成功:${SharedPre.getToken()}');
 
@@ -73,9 +67,13 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       if (response.statusCode == 200) {
+        print(response.body);
         final responseBody = jsonDecode(response.body);
+        final name = responseBody['data']['userName'];
         final token = responseBody['message'];
         SharedPre.saveToken(token); // 存储token
+        SharedPre.setName(name); // 存储name
+        SharedPre.setUserId(responseBody['data']['userId']);
         print('登录成功:${token}');
 
         Navigator.pushReplacement(

@@ -7,6 +7,7 @@ class ShoppingCart {
   final String itemName;
   final String userName;
   final int quantity;
+  final double price;
 
   //数据库中不存在
   final List<Item>? itemList;
@@ -18,7 +19,8 @@ class ShoppingCart {
       required this.quantity,
       this.itemList,
       required this.itemName,
-      required this.userName});
+      required this.userName,
+      required this.price});
 
   factory ShoppingCart.fromJson(Map<String, dynamic> json) {
     return ShoppingCart(
@@ -29,6 +31,7 @@ class ShoppingCart {
       itemList: json['itemList'],
       itemName: json['itemName'],
       userName: json['userName'],
+      price: json['price'],
     );
   }
 }

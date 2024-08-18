@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
+import 'package:diary_cli/userpage/cartPage.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget {
@@ -23,6 +26,7 @@ class _UserHomeState extends State<UserHome>
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
   late String _token;
+  static bool isCart = false;
 
   int screenIndex = UserSelectedScreen.pet.value;
   @override
@@ -58,14 +62,28 @@ class _UserHomeState extends State<UserHome>
       UserSelectedScreen screenSelectedUser, bool showNavBarExample) {
     switch (screenSelectedUser) {
       case UserSelectedScreen.pet:
-        // return Text("人员管理1");
-        return Text("页面1");
+        {
+          isCart = false;
+          return Text("页面1");
+        }
       case UserSelectedScreen.catogaries:
-        return Text("页面2");
+        {
+          isCart = false;
+          return Text("页面2");
+        }
       case UserSelectedScreen.order:
-        return Text("页面3");
+        {
+          isCart = true;
+          return CartPage(
+            homePageKey: scaffoldKey,
+          );
+        }
+      // return Text("页面3");
       case UserSelectedScreen.user:
-        return Text("页面4");
+        {
+          isCart = false;
+          return Text("页面4");
+        }
     }
   }
 
