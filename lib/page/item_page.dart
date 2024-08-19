@@ -98,7 +98,7 @@ class _ItemPageState extends State<ItemPage> {
                       final items = snapshot.data!;
                       this.itemNum = items.length;
                       print(itemNum);
-                      return Column(
+                      return ListView(
                         children: [
                           Row(
                             children: [
@@ -603,7 +603,7 @@ class _ItemPageState extends State<ItemPage> {
                         onPressed: () async {
                           // print(this.itemNum);
                           newFilePath =
-                              'D:/photos/itemImg/photo${itemNum + 1}.png';
+                              'D:/photos/itemImg/photo${itemNum + 1}.jpg';
                           final Uint8List content =
                               await this.file1!.readAsBytes();
                           File newFile = File(newFilePath);

@@ -19,23 +19,33 @@ Future<void> main() async {
         scaffoldBackgroundColor: bgColor,
         canvasColor: secondaryColor,
       ),
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(
-            create: (context) => prefix0.MenuController(),
-          )
-        ],
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: LoginPage(),
-        ),
-      ),
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider(
+          create: (context) => prefix0.MenuController(),
+        )
+      ], child: MainP()),
       routes: {
         '/register': (context) => RegisterPage(),
         '/main': (context) => MainPage(),
         '/login': (context) => LoginPage(),
         '/userRegister': (context) => UserRegisterPage(),
+        '/mainP': (context) => MainP(),
       },
     ));
+  }
+}
+
+class MainP extends StatefulWidget {
+  @override
+  _MainPState createState() => _MainPState();
+}
+
+class _MainPState extends State<MainP> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: LoginPage(),
+    );
   }
 }

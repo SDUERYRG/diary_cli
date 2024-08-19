@@ -111,7 +111,7 @@ class _UserManagePageState extends State<UserManagePage> {
                       return Center(child: Text('查询失败: ${snapshot.error}'));
                     } else {
                       final users = snapshot.data!;
-                      return Column(
+                      return ListView(
                         children: [
                           Row(
                             children: [

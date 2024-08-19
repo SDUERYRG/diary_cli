@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
       SharedPre.saveToken(token); // 存储token
       print('登录成功:${SharedPre.getToken()}');
 
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => MainPage()),
       );

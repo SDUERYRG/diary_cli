@@ -86,6 +86,7 @@ class _CartCardState extends State<CartCard> {
             ),
           ),
           Expanded(
+            flex: 2,
             child: Column(
               children: [
                 Align(

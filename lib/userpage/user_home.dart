@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
+import 'package:diary_cli/page/user_info_page.dart';
 import 'package:diary_cli/userpage/cartPage.dart';
+import 'package:diary_cli/userpage/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +66,8 @@ class _UserHomeState extends State<UserHome>
       case UserSelectedScreen.pet:
         {
           isCart = false;
-          return Text("页面1");
+          // return Text("页面1");
+          return HomePage();
         }
       case UserSelectedScreen.catogaries:
         {
@@ -82,7 +85,7 @@ class _UserHomeState extends State<UserHome>
       case UserSelectedScreen.user:
         {
           isCart = false;
-          return Text("页面4");
+          return UserInfoPage();
         }
     }
   }

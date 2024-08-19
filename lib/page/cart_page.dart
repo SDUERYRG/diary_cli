@@ -151,7 +151,7 @@ class _CartPageState extends State<CartPage> {
                     } else {
                       final carts = snapshot.data!;
                       this.cartNum = carts.length;
-                      return Column(
+                      return ListView(
                         children: [
                           Row(
                             children: [
@@ -240,7 +240,7 @@ class _CartPageState extends State<CartPage> {
                                             height: 600,
                                             child: Image.file(
                                               File(
-                                                  'D:/photos/itemImg/photo$itemId.png'),
+                                                  'D:/photos/itemImg/photo$itemId.jpg'),
                                               fit: BoxFit.contain,
                                             ),
                                           ),
@@ -249,7 +249,7 @@ class _CartPageState extends State<CartPage> {
                                     );
                                   },
                                   child: Image.file(
-                                    File('D:/photos/itemImg/photo$itemId.png'),
+                                    File('D:/photos/itemImg/photo$itemId.jpg'),
                                     width: 70,
                                     height: 70,
                                     fit: BoxFit.contain,
