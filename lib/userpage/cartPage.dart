@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/cart_card.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
+import 'package:diary_cli/entity/Address.dart';
+import 'package:diary_cli/entity/Item.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
 import 'package:http/http.dart' as http;
@@ -20,6 +22,8 @@ class _CartPageState extends State<CartPage> {
   late double sum;
   List<bool> _checkedList = [];
   List<double> _priceList = [];
+  List<String> _itemIdList = [];
+  Address? address;
   int cartNum = 0;
   // double sum = 0;
   late Future<List<ShoppingCart>> cartList;
@@ -84,6 +88,14 @@ class _CartPageState extends State<CartPage> {
       } else {
         _checkedList[index] = value;
       }
+
+      cartList.then((carts) {
+        if (value) {
+          _itemIdList.add(carts[index].itemId);
+        } else {
+          _itemIdList.remove(carts[index].itemId);
+        }
+      });
     });
     print(_checkedList);
     print(_priceList);
@@ -96,6 +108,90 @@ class _CartPageState extends State<CartPage> {
       cartList = fetchUserCart(0, 10, SharedPre.getName().toString(),
           SharedPre.getToken().toString());
     });
+  }
+
+  Future<void> getUserAddress(String userId) async {
+    // 构建请求URL
+    final url = Uri.parse(
+        'http://192.168.1.5:4001/diary-server/address/getUserAddress/$userId');
+
+    // 发送 GET 请求
+    final response = await http.get(
+      url,
+      headers: {
+        'token': SharedPre.getToken().toString(),
+        'Content-Type': 'application/json',
+      },
+    );
+    final responseBody = jsonDecode(response.body);
+    // 处理响应
+    if (responseBody['status'] == true) {
+      print(responseBody['data']);
+      List<dynamic> addressList = responseBody['data'];
+      address = Address.fromJson(addressList[0]);
+      print('获取成功: $addressList');
+    } else {
+      print('获取失败');
+      print(response.body);
+    }
+  }
+
+  Future<void> pay() async {
+    await getUserAddress(SharedPre.getUserId().toString());
+    final url =
+        Uri.parse('http://192.168.1.5:4001/diary-server/shoppingCart/pay');
+    final List<Item> selectedItems = [];
+
+    // 构建请求体
+    Map<String, dynamic> requestBody = {
+      'itemIdList': _itemIdList,
+      'price': sum.toString(),
+      'address': address?.toJson(), // 调用 toJson 方法
+    };
+
+    // 发送 POST 请求
+    final response = await http.post(
+      url,
+      headers: {
+        'token': SharedPre.getToken().toString(),
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(requestBody), // 将请求体转换为 JSON 字符串
+    );
+
+    final responseBody = jsonDecode(response.body);
+    print(responseBody);
+    if (responseBody['status'] == true) {
+      print('购买成功');
+      for (int i = 0; i < _itemIdList.length; i++) {
+        await _deleteCart(_itemIdList[i], SharedPre.getUserId().toString());
+      }
+      setState(() {
+        this.sum = 0;
+      });
+      refreshCart();
+    } else {
+      print('购买失败');
+      print(response.body);
+    }
+  }
+
+  Future<void> _deleteCart(String itemId, String userId) async {
+    userId = SharedPre.getUserId().toString();
+    String token = SharedPre.getToken().toString();
+    print(itemId);
+    final url = Uri.parse(
+        'http://192.168.1.5:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
+    final response = await http.delete(url, headers: {
+      'token': token,
+    });
+    if (response.statusCode == 200) {
+      final responseBody = response.body;
+      print(responseBody);
+    } else {
+      final responseBody = response.body;
+      print(responseBody);
+    }
   }
 
   @override
@@ -159,8 +255,9 @@ class _CartPageState extends State<CartPage> {
               children: [
                 Text('总价: \$${sum.toStringAsFixed(2)}'),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     // 处理结算逻辑
+                    await pay();
                   },
                   child: Text('结算'),
                 ),

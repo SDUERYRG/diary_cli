@@ -1,13 +1,9 @@
-import 'dart:async';
-
-import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
-import 'package:diary_cli/page/user_info_page.dart';
 import 'package:diary_cli/userpage/cartPage.dart';
 import 'package:diary_cli/userpage/home_page.dart';
+import 'package:diary_cli/userpage/user_info_page.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserHome extends StatefulWidget {

@@ -54,9 +54,6 @@ class _UserInfoPageState extends State<UserInfoPage> {
           Container(
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.06,
-            decoration: BoxDecoration(
-              color: Colors.yellow,
-            ),
             child: FFButtonWidget(
               onPressed: () async {
                 await logout();
