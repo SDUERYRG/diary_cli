@@ -1,16 +1,11 @@
 import 'dart:convert';
 
 import 'package:diary_cli/SharedPre.dart';
-import 'package:diary_cli/components/flutter_flow_swipeable_stack.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/components/main_card.dart';
 import 'package:diary_cli/entity/Item.dart';
 import 'package:diary_cli/userpage/flutter_flow_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_card_swiper/flutter_card_swiper.dart';
-import 'package:smooth_page_indicator/smooth_page_indicator.dart'
-    as smooth_page_indicator;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'home_page_model.dart';
 export 'home_page_model.dart';

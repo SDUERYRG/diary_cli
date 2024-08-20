@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/cart_card.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/entity/Address.dart';
-import 'package:diary_cli/entity/Item.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
 import 'package:http/http.dart' as http;
-import 'package:diary_cli/userpage/user_home.dart';
 
 class CartPage extends StatefulWidget {
   final GlobalKey homePageKey;
@@ -140,7 +137,6 @@ class _CartPageState extends State<CartPage> {
     await getUserAddress(SharedPre.getUserId().toString());
     final url =
         Uri.parse('http://192.168.1.5:4001/diary-server/shoppingCart/pay');
-    final List<Item> selectedItems = [];
 
     // 构建请求体
     Map<String, dynamic> requestBody = {

@@ -1,6 +1,5 @@
 import 'package:diary_cli/components/button.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
-import 'package:diary_cli/page/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -39,8 +38,42 @@ class _UserInfoPageState extends State<UserInfoPage> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height * 0.12,
-            decoration: BoxDecoration(
-              color: Colors.red,
+            child: Row(
+              children: [
+                Padding(padding: EdgeInsets.only(left: 20)),
+                Expanded(
+                    child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    IconButton(
+                      iconSize: 45,
+                      icon: const Icon(Icons.receipt_long_rounded),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/order'); // 返回登录页面
+                      },
+                    ),
+                    Text('订单'),
+                  ],
+                )),
+                Expanded(
+                    child: Container(
+                  width: 45,
+                  height: 45,
+                )),
+                Expanded(
+                    child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.only(top: 10)),
+                    IconButton(
+                      iconSize: 45,
+                      icon: const Icon(Icons.add_location_alt_outlined),
+                      onPressed: () {},
+                    ),
+                    Text('地址'),
+                  ],
+                )),
+                Padding(padding: EdgeInsets.only(right: 20)),
+              ],
             ),
           ),
           Container(

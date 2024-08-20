@@ -23,7 +23,7 @@ class _UserHomeState extends State<UserHome>
   bool controllerInitialized = false;
   bool showMediumSizeLayout = false;
   bool showLargeSizeLayout = false;
-  late String _token;
+  // ignore: unused_field
   static bool isCart = false;
 
   int screenIndex = UserSelectedScreen.pet.value;
@@ -31,7 +31,6 @@ class _UserHomeState extends State<UserHome>
   initState() {
     super.initState();
 
-    _loadToken();
     controller = AnimationController(
       duration: Duration(milliseconds: transitionLength.toInt() * 3),
       value: 0,
@@ -46,13 +45,6 @@ class _UserHomeState extends State<UserHome>
   void handleScreenChanged(int screenSelected) {
     setState(() {
       screenIndex = screenSelected;
-    });
-  }
-
-  _loadToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _token = prefs.getString('token') ?? '';
     });
   }
 
@@ -258,9 +250,9 @@ class _NavigationTransitionState extends State<NavigationTransition> {
 const List<NavigationDestination> appBarDestinations = [
   NavigationDestination(
       tooltip: '',
-      icon: Icon(Icons.contacts_outlined),
+      icon: Icon(Icons.pets_outlined),
       label: '主页',
-      selectedIcon: Icon(Icons.contacts_rounded)),
+      selectedIcon: Icon(Icons.pets_sharp)),
   NavigationDestination(
     tooltip: '',
     icon: Icon(Icons.local_mall_outlined),

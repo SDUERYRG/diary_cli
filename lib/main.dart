@@ -1,5 +1,6 @@
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/page/main_page.dart';
+import 'package:diary_cli/userpage/order_page.dart';
 import 'package:diary_cli/userpage/user_regsiter.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/page/login_page.dart';
@@ -30,6 +31,7 @@ Future<void> main() async {
         '/login': (context) => LoginPage(),
         '/userRegister': (context) => UserRegisterPage(),
         '/mainP': (context) => MainP(),
+        '/order': (context) => OrderPage(),
       },
     ));
   }

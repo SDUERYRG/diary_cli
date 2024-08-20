@@ -5,7 +5,6 @@ import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../SharedPre.dart';
 
@@ -265,7 +264,6 @@ class _CartPageState extends State<CartPage> {
                                   children: [
                                     ElevatedButton(
                                         onPressed: () async {
-                                          final cartId = cart.cartId;
                                           final itemId = cart.itemId;
                                           final userId = cart.userId;
                                           final url = Uri.parse(

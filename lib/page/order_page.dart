@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/Order.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class OrderPage extends StatefulWidget {
   const OrderPage({super.key});

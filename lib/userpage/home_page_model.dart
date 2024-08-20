@@ -1,8 +1,6 @@
 import 'package:diary_cli/userpage/flutter_flow_model.dart';
 
 import 'home_page.dart' show HomePage;
-import 'package:smooth_page_indicator/smooth_page_indicator.dart'
-    as smooth_page_indicator;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 

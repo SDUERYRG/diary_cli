@@ -1,10 +1,8 @@
-import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CartCard extends StatefulWidget {
   final ShoppingCart cart;
