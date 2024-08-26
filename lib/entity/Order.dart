@@ -7,7 +7,6 @@ class Order {
   String state;
   double price;
   String userId;
-
   Order({
     required this.orderId,
     required this.orderNum,

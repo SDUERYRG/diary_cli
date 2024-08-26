@@ -290,6 +290,7 @@ class _LoginPageState extends State<LoginPage> {
                               return '请输入账号';
                             }
                             _account = value;
+                            print('账号：$_account');
                             return null;
                           },
                         ),

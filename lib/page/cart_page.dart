@@ -54,11 +54,14 @@ class _CartPageState extends State<CartPage> {
     final queryParameters = {
       'userName': userName,
     };
+    final header = {
+      'token': SharedPre.getToken().toString(),
+    };
     final url = Uri.http(
         '192.168.1.5:4001',
         '/diary-server/shoppingCart/searchByUser/$current/$pageSize',
         queryParameters);
-    final response = await http.get(url);
+    final response = await http.get(url, headers: header);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       if (responseBody['status'] == true) {
@@ -81,11 +84,14 @@ class _CartPageState extends State<CartPage> {
     final queryParameters = {
       'itemName': itemName,
     };
+    final header = {
+      'token': SharedPre.getToken().toString(),
+    };
     final url = Uri.http(
         '192.168.1.5:4001',
         '/diary-server/shoppingCart/searchByItem/$current/$pageSize',
         queryParameters);
-    final response = await http.get(url);
+    final response = await http.get(url, headers: header);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
       if (responseBody['status'] == true) {

@@ -17,6 +17,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
   String _password = '';
   // ignore: unused_field
   String _power = '用户'; // 默认用户权限
+  String _code = '';
   // ignore: unused_field
   String _confirmPassword = '';
   String _email = '';
@@ -24,6 +25,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
   String _regTime = '';
 
   Future<void> _sendCode() async {
+    // _email = '1941456753@qq.com';
     final Uri uri =
         Uri.parse('http://192.168.1.5:4001/diary-server/sendMail/$_email');
     // Uri.parse('http://localhost:4001/flower_shop/sendMail/$_email');
@@ -103,6 +105,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _account = value;
+                      });
+                    },
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           fontSize: 16.0,
@@ -165,6 +172,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _userName = value;
+                      });
+                    },
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           fontSize: 16.0,
@@ -210,6 +222,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                         return '请输入用户名';
                       }
                       _userName = value;
+                      print('UserName: $_userName');
                       return null;
                     },
                   ),
@@ -227,6 +240,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _password = value;
+                      });
+                    },
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           fontSize: 16.0,
@@ -273,6 +291,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                         return '请输入密码';
                       }
                       _password = value;
+                      print('Password: $_password');
                       return null;
                     },
                   ),
@@ -290,6 +309,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _confirmPassword = value;
+                      });
+                    },
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           fontSize: 16.0,
@@ -357,6 +381,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                     ),
                   ),
                   TextFormField(
+                    onChanged: (value) {
+                      setState(() {
+                        _email = value;
+                      });
+                    },
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           fontFamily: 'Inter',
                           fontSize: 16.0,
@@ -401,7 +430,8 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                       if (value!.isEmpty) {
                         return '请输入邮箱';
                       }
-                      _email = value;
+                      this._email = value;
+                      print('Email: $_email');
                       return null;
                     },
                   ),
@@ -430,6 +460,11 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                               ),
                             ),
                             TextFormField(
+                              onChanged: (value) {
+                                setState(() {
+                                  _verificationCode = value;
+                                });
+                              },
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -476,7 +511,7 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
                                 if (value!.isEmpty) {
                                   return '请输入验证码';
                                 }
-                                _email = value;
+                                _code = value;
                                 return null;
                               },
                             ),
