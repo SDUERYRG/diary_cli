@@ -17,6 +17,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late double sum;
+  String _host = '192.168.160.32';
   List<bool> _checkedList = [];
   List<double> _priceList = [];
   List<String> _itemIdList = [];
@@ -30,7 +31,7 @@ class _CartPageState extends State<CartPage> {
     super.initState();
     setState(() {
       sum = 0;
-      cartList = fetchUserCart(0, 10, SharedPre.getName().toString(),
+      cartList = fetchUserCart(0, 100, SharedPre.getName().toString(),
           SharedPre.getToken().toString());
     });
   }
@@ -44,7 +45,7 @@ class _CartPageState extends State<CartPage> {
       'token': token, // 将token添加到请求头
     };
     final url = Uri.http(
-        '192.168.1.5:4001',
+        '$_host:4001',
         '/diary-server/shoppingCart/searchByUser/$current/$pageSize',
         queryParameters);
     final response = await http.get(url, headers: headers); // 添加headers参数
@@ -102,7 +103,7 @@ class _CartPageState extends State<CartPage> {
 
   void refreshCart() {
     setState(() {
-      cartList = fetchUserCart(0, 10, SharedPre.getName().toString(),
+      cartList = fetchUserCart(0, 100, SharedPre.getName().toString(),
           SharedPre.getToken().toString());
     });
   }
@@ -110,7 +111,7 @@ class _CartPageState extends State<CartPage> {
   Future<void> getUserAddress(String userId) async {
     // 构建请求URL
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/address/getUserAddress/$userId');
+        'http://$_host:4001/diary-server/address/getUserAddress/$userId');
 
     // 发送 GET 请求
     final response = await http.get(
@@ -135,8 +136,7 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> pay() async {
     await getUserAddress(SharedPre.getUserId().toString());
-    final url =
-        Uri.parse('http://192.168.1.5:4001/diary-server/shoppingCart/pay');
+    final url = Uri.parse('http://$_host:4001/diary-server/shoppingCart/pay');
 
     // 构建请求体
     Map<String, dynamic> requestBody = {
@@ -177,7 +177,7 @@ class _CartPageState extends State<CartPage> {
     String token = SharedPre.getToken().toString();
     print(itemId);
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
+        'http://$_host:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
     final response = await http.delete(url, headers: {
       'token': token,
     });

@@ -1,6 +1,7 @@
 import 'package:diary_cli/page/cart_page.dart';
 import 'package:diary_cli/page/item_page.dart';
 import 'package:diary_cli/page/order_page.dart';
+import 'package:diary_cli/page/sort_page.dart';
 import 'package:diary_cli/page/user_manage_page.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
@@ -87,6 +88,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         return CartPage();
       case SelectedScreen.orders:
         return OrderPage();
+      case SelectedScreen.sort:
+        return SortPage();
     }
   }
 
@@ -286,6 +289,12 @@ const List<NavigationDestination> appBarDestinations = [
     label: '订单管理',
     tooltip: '',
     selectedIcon: Icon(Icons.feed_rounded),
+  ),
+  NavigationDestination(
+    icon: Icon(Icons.auto_awesome_motion_outlined),
+    label: '分类管理',
+    tooltip: '',
+    selectedIcon: Icon(Icons.auto_awesome_motion_rounded),
   )
 ];
 final List<NavigationRailDestination> navRailDestinations = appBarDestinations

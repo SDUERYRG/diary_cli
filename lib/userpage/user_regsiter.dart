@@ -11,6 +11,7 @@ class UserRegisterPage extends StatefulWidget {
 }
 
 class _UserRegisterPageState extends State<UserRegisterPage> {
+  String _host = '192.168.160.32';
   final _formKey = GlobalKey<FormState>();
   String _userName = '';
   String _account = '';
@@ -27,15 +28,15 @@ class _UserRegisterPageState extends State<UserRegisterPage> {
   Future<void> _sendCode() async {
     // _email = '1941456753@qq.com';
     final Uri uri =
-        Uri.parse('http://192.168.1.5:4001/diary-server/sendMail/$_email');
+        Uri.parse('http://$_host:4001/diary-server/sendMail/$_email');
     // Uri.parse('http://localhost:4001/flower_shop/sendMail/$_email');
     final response = await http.get(uri);
     print(response.body);
   }
 
-  static Future<void> _register(String name, String account, String email,
+  Future<void> _register(String name, String account, String email,
       String password, String code, String power, String regTime) async {
-    final url = Uri.parse('http://192.168.1.5:4001/diary-server/userRegister');
+    final url = Uri.parse('http://$_host:4001/diary-server/userRegister');
     final response = await http.post(
       url,
       headers: <String, String>{

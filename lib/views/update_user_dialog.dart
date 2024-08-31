@@ -15,6 +15,7 @@ class UpdateUserDialog extends StatefulWidget {
 }
 
 class _UpdateUserDialogState extends State<UpdateUserDialog> {
+  String _host = '192.168.160.32';
   late String _userName;
   late String _account;
   late String _email;
@@ -31,7 +32,7 @@ class _UpdateUserDialogState extends State<UpdateUserDialog> {
 
   Future<void> updateUser(String userId, String userName, String account,
       String email, String power) async {
-    final url = Uri.parse('http://192.168.1.5:4001/diary-server/updateUser');
+    final url = Uri.parse('http://$_host:4001/diary-server/updateUser');
     final response = await http.put(
       url,
       headers: <String, String>{

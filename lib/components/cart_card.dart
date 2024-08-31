@@ -21,6 +21,7 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
+  String _host = '192.168.160.32';
   bool checked = false;
   late String itemId;
   String image = '';
@@ -38,7 +39,7 @@ class _CartCardState extends State<CartCard> {
     String itemId = widget.cart.itemId;
     print(itemId);
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
+        'http://$_host:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
     final response = await http.delete(url, headers: {
       'token': token,
     });

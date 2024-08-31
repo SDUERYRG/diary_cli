@@ -9,8 +9,9 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
+  String _host = '192.168.160.32';
   Future<void> logout() async {
-    final url = Uri.parse('http://192.168.1.5:4001/diary-server//logout');
+    final url = Uri.parse('http://$_host:4001/diary-server//logout');
     final response = await http.get(url);
     print(response.body);
     if (response.statusCode == 200) {

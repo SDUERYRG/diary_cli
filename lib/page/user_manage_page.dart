@@ -15,6 +15,7 @@ class UserManagePage extends StatefulWidget {
 
 class _UserManagePageState extends State<UserManagePage> {
   late Future<List<User>> futureUsers;
+  String _host = '192.168.160.32';
   String _userId = '';
   String _userName = '';
   String _account = '';
@@ -29,11 +30,11 @@ class _UserManagePageState extends State<UserManagePage> {
   @override
   void initState() {
     super.initState();
-    futureUsers = fetchAllUsers(1, 10); // 示例：查询第1页，每页10条记录
+    futureUsers = fetchAllUsers(1, 100); // 示例：查询第1页，每页10条记录
   }
 
   Future<void> _updateUser() async {
-    final url = Uri.parse('http://192.168.1.5:4001/diary-server/updateUser');
+    final url = Uri.parse('http://$_host:4001/diary-server/updateUser');
     final response = await http.put(
       url,
       headers: <String, String>{
@@ -53,7 +54,7 @@ class _UserManagePageState extends State<UserManagePage> {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       setState(() {
-        futureUsers = fetchAllUsers(1, 10);
+        futureUsers = fetchAllUsers(1, 100);
       });
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('用户信息修改成功')),
@@ -141,7 +142,7 @@ class _UserManagePageState extends State<UserManagePage> {
                                 child: ElevatedButton(
                                   onPressed: () {
                                     setState(() {
-                                      futureUsers = fetchUsers(1, 10);
+                                      futureUsers = fetchUsers(1, 100);
                                     });
                                   },
                                   child: const Text('搜索'),
@@ -258,7 +259,7 @@ class _UserManagePageState extends State<UserManagePage> {
                                                   ElevatedButton(
                                                     onPressed: () async {
                                                       final url = Uri.parse(
-                                                          'http://192.168.1.5:4001/diary-server/addUser');
+                                                          'http://$_host:4001/diary-server/addUser');
                                                       final response =
                                                           await http.post(
                                                         url,
@@ -290,7 +291,7 @@ class _UserManagePageState extends State<UserManagePage> {
                                                         setState(() {
                                                           futureUsers =
                                                               fetchAllUsers(1,
-                                                                  10); // 刷新DataTable内容
+                                                                  100); // 刷新DataTable内容
                                                         });
                                                       } else {
                                                         print(
@@ -364,7 +365,7 @@ class _UserManagePageState extends State<UserManagePage> {
                                         onPressed: () async {
                                           final userId = users[index].userId;
                                           final url = Uri.parse(
-                                              'http://192.168.1.5:4001/diary-server/$userId');
+                                              'http://$_host:4001/diary-server/$userId');
                                           final response =
                                               await http.delete(url);
                                           if (response.statusCode == 200) {
@@ -532,8 +533,8 @@ class _UserManagePageState extends State<UserManagePage> {
   }
 
   Future<List<User>> fetchAllUsers(int current, int pageSize) async {
-    final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/all/$current/$pageSize');
+    final url =
+        Uri.parse('http://$_host:4001/diary-server/all/$current/$pageSize');
     final response = await http.get(url);
     // print(response.body);
     if (response.statusCode == 200) {
@@ -549,7 +550,7 @@ class _UserManagePageState extends State<UserManagePage> {
     final queryParameters = {
       'keyword': _searchUserName,
     };
-    final uri = Uri.http('192.168.1.5:4001',
+    final uri = Uri.http('$_host:4001',
         'diary-server/search/$current/$pageSize', queryParameters);
     final response = await http.get(uri);
 

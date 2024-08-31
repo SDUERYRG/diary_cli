@@ -16,17 +16,18 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  String _host = '192.168.160.32';
   late Future<List<Order>> futureOrders;
   late Future<OrderItem> futureOrderItems;
   @override
   void initState() {
     super.initState();
-    futureOrders = fetchAllOrders(1, 10);
+    futureOrders = fetchAllOrders(1, 100);
   }
 
   Future<void> deliverGoods(Order order) async {
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/order/deliverGoods/${order.orderId}');
+        'http://$_host:4001/diary-server/order/deliverGoods/${order.orderId}');
     final response = await http.get(
       url,
       headers: {
@@ -43,8 +44,8 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future<List<Order>> fetchAllOrders(int current, int pageSize) async {
-    final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/order/$current/$pageSize');
+    final url =
+        Uri.parse('http://$_host:4001/diary-server/order/$current/$pageSize');
     final response = await http.get(url, headers: {
       'Content-Type': 'application/json',
       'token': SharedPre.getToken().toString()
@@ -60,7 +61,7 @@ class _OrderPageState extends State<OrderPage> {
 
   Future<OrderItem> fetchOrderItems(String orderId, String orderNum) async {
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/order/show/$orderId/$orderNum');
+        'http://$_host:4001/diary-server/order/show/$orderId/$orderNum');
     final response = await http.get(
       url,
       headers: {
@@ -127,7 +128,7 @@ class _OrderPageState extends State<OrderPage> {
                     } else {
                       final orders = snapshot.data!;
 
-                      return Column(
+                      return ListView(
                         children: [
                           Row(
                             children: [
@@ -314,7 +315,7 @@ class _OrderPageState extends State<OrderPage> {
                                           await deliverGoods(order);
                                           setState(() {
                                             futureOrders =
-                                                fetchAllOrders(1, 10);
+                                                fetchAllOrders(1, 100);
                                           });
                                         },
                                         child: const Text("发货"),

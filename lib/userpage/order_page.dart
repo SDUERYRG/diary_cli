@@ -13,6 +13,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+  String _host = '192.168.160.32';
   late Future<OrderItem> futureOrderItems;
   ThemeMode themeMode = ThemeMode.system;
   bool get useLightMode {
@@ -30,12 +31,12 @@ class _OrderPageState extends State<OrderPage> {
   @override
   void initState() {
     super.initState();
-    fetchOrders(0, 10);
+    fetchOrders(0, 100);
   }
 
   Future<OrderItem> fetchOrderItem(String orderId, String orderNum) async {
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/order/show/$orderId/$orderNum');
+        'http://$_host:4001/diary-server/order/show/$orderId/$orderNum');
     final response = await http.get(
       url,
       headers: {
@@ -57,8 +58,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   Future<OrderItem?> fetchOrderItems(String orderId) async {
-    final url =
-        Uri.parse('http://192.168.1.5:4001/diary-server/order/$orderId');
+    final url = Uri.parse('http://$_host:4001/diary-server/order/$orderId');
     final response = await http.get(
       url,
       headers: {
@@ -83,7 +83,7 @@ class _OrderPageState extends State<OrderPage> {
   Future<List<Order>> fetchOrders(int current, int pageSize) async {
     final userId = SharedPre.getUserId();
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/order/userOrder/$userId/$current/$pageSize');
+        'http://$_host:4001/diary-server/order/userOrder/$userId/$current/$pageSize');
     final response = await http.get(
       url,
       headers: {
@@ -116,7 +116,7 @@ class _OrderPageState extends State<OrderPage> {
             title: const Text('订单'),
           ),
           body: FutureBuilder(
-            future: fetchOrders(0, 10),
+            future: fetchOrders(0, 100),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(

@@ -17,6 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  String _host = '192.168.160.32';
   late HomePageModel _model;
   late Future<List<Item>> futureItems;
   int itemNum = 0;
@@ -24,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _model = createModel(context, () => HomePageModel());
-    futureItems = fetchAllItems(1, 10);
+    futureItems = fetchAllItems(1, 100);
   }
 
   @override
@@ -35,8 +36,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<List<Item>> fetchAllItems(int current, int pageSize) async {
-    final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/item/$current/$pageSize');
+    final url =
+        Uri.parse('http://$_host:4001/diary-server/item/$current/$pageSize');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> addToCart(String itemId, String userId, double price) async {
     print('itemId: $itemId, userId: $userId, price: $price');
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/shoppingCart/addToShoppingCart');
+        'http://$_host:4001/diary-server/shoppingCart/addToShoppingCart');
     final headers = {
       'Content-Type': 'application/json',
       'token': SharedPre.getToken().toString()
@@ -96,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/19/d73c2bc3a4232e9b466d028b8d0af6d2.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/4bc66f7fbada38e2560d8542bbaa21aa.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -105,7 +106,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/19/fdc048bb8bbbd4dd6efc4b413d66769b.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/89760d4213644de3ea50874f217fa54b.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -114,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/19/b999032f05583a1d595a4441e1e45f32.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/ca878e09ccdb9a367e3588bf17c443ac.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -123,7 +124,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/19/f82bff9bcb5e1f74294f29bf5aa7ef7d.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/b79ac4b45d4f4593e54494afa5c100ca.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,

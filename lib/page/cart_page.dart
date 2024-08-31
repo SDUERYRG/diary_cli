@@ -17,7 +17,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late Future<List<ShoppingCart>> futureCart;
-
+  String _host = '192.168.160.32';
   int cartNum = 0;
   String _searchByUser = '';
   String _searchByItem = '';
@@ -26,14 +26,14 @@ class _CartPageState extends State<CartPage> {
   void initState() {
     super.initState();
     _token = SharedPre.getToken();
-    futureCart = fetchAllCart(1, 10, _token);
+    futureCart = fetchAllCart(1, 100, _token);
   }
 
   Future<List<ShoppingCart>> fetchAllCart(
       int current, int pageSize, String? token) async {
     print('token : $_token');
     final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/shoppingCart/$current/$pageSize');
+        'http://$_host:4001/diary-server/shoppingCart/$current/$pageSize');
     final response = await http.get(
       url,
       headers: {
@@ -58,7 +58,7 @@ class _CartPageState extends State<CartPage> {
       'token': SharedPre.getToken().toString(),
     };
     final url = Uri.http(
-        '192.168.1.5:4001',
+        '$_host:4001',
         '/diary-server/shoppingCart/searchByUser/$current/$pageSize',
         queryParameters);
     final response = await http.get(url, headers: header);
@@ -88,7 +88,7 @@ class _CartPageState extends State<CartPage> {
       'token': SharedPre.getToken().toString(),
     };
     final url = Uri.http(
-        '192.168.1.5:4001',
+        '$_host:4001',
         '/diary-server/shoppingCart/searchByItem/$current/$pageSize',
         queryParameters);
     final response = await http.get(url, headers: header);
@@ -203,11 +203,11 @@ class _CartPageState extends State<CartPage> {
                                       setState(() {
                                         futureCart = _searchByUser != ''
                                             ? fetchUserCart(
-                                                1, 10, _searchByUser)
+                                                1, 100, _searchByUser)
                                             : _searchByItem != ''
                                                 ? fetchItemCart(
-                                                    1, 10, _searchByItem)
-                                                : fetchAllCart(1, 10, _token);
+                                                    1, 100, _searchByItem)
+                                                : fetchAllCart(1, 100, _token);
                                       });
                                     },
                                     child: const Text("查询")),
@@ -273,7 +273,7 @@ class _CartPageState extends State<CartPage> {
                                           final itemId = cart.itemId;
                                           final userId = cart.userId;
                                           final url = Uri.parse(
-                                              'http://192.168.1.5:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
+                                              'http://$_host:4001/diary-server/shoppingCart/deleteItem/$itemId/$userId');
                                           final response =
                                               await http.delete(url);
                                           if (response.statusCode == 200) {

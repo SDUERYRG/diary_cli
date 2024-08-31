@@ -17,12 +17,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String _host = '192.168.160.32';
   final _formKey = GlobalKey<FormState>();
   String _power = '用户';
   late String _password, _account;
 
   Future<void> _login(String account, String password) async {
-    final url = Uri.parse('http://192.168.1.5:4001/diary-server/login');
+    final url = Uri.parse('http://$_host:4001/diary-server/login');
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> _userLogin(String account, String password) async {
     try {
-      final url = Uri.parse('http://192.168.1.5:4001/diary-server/login');
+      final url = Uri.parse('http://$_host:4001/diary-server/login');
       final response = await http.post(
         url,
         headers: <String, String>{

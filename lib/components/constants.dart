@@ -43,9 +43,9 @@ enum SelectedScreen {
   user(0),
   item(1),
   cart(2),
-  orders(3);
+  orders(3),
+  sort(4);
 
   const SelectedScreen(this.value);
   final int value;
 }
-

@@ -15,6 +15,7 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
+  String _host = '192.168.160.32';
   late Future<List<Item>> futureItems;
   String _itemId = '';
   String _itemName = '';
@@ -48,7 +49,7 @@ class _ItemPageState extends State<ItemPage> {
     super.initState();
     _fileExtensionController
         .addListener(() => _extension = _fileExtensionController.text);
-    futureItems = fetchAllItems(1, 10);
+    futureItems = fetchAllItems(1, 100);
   }
 
   @override
@@ -129,8 +130,8 @@ class _ItemPageState extends State<ItemPage> {
                                     onPressed: () {
                                       setState(() {
                                         futureItems = _searchKeyword == ''
-                                            ? fetchAllItems(1, 10)
-                                            : fetchItem(_searchKeyword, 1, 10);
+                                            ? fetchAllItems(1, 100)
+                                            : fetchItem(_searchKeyword, 1, 100);
                                       });
                                     },
                                     child: const Text("查询")),
@@ -205,7 +206,7 @@ class _ItemPageState extends State<ItemPage> {
                                           final itemId = items[index].itemId;
                                           String picture = 'photo$itemId.png';
                                           final url = Uri.parse(
-                                              'http://192.168.1.5:4001/diary-server/item/$itemId/$picture');
+                                              'http://$_host:4001/diary-server/item/$itemId/$picture');
                                           final response =
                                               await http.delete(url);
                                           if (response.statusCode == 200) {
@@ -258,13 +259,10 @@ class _ItemPageState extends State<ItemPage> {
 
   Future<List<Item>> fetchItem(
       String keyword, int current, int pageSize) async {
-    // final url = Uri.parse(
-    //     'http://192.168.1.5:4001/diary-server/item/search/$current/$pageSize');
-    // final response = await http.get(url, body: {'keyword': keyword});
     final queryParameters = {
       'keyword': keyword,
     };
-    final url = Uri.http('192.168.1.5:4001',
+    final url = Uri.http('$_host:4001',
         '/diary-server/item/search/$current/$pageSize', queryParameters);
     final response = await http.get(url);
     if (response.statusCode == 200) {
@@ -277,8 +275,8 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   Future<List<Item>> fetchAllItems(int current, int pageSize) async {
-    final url = Uri.parse(
-        'http://192.168.1.5:4001/diary-server/item/$current/$pageSize');
+    final url =
+        Uri.parse('http://$_host:4001/diary-server/item/$current/$pageSize');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
@@ -361,7 +359,7 @@ class _ItemPageState extends State<ItemPage> {
   Future<void> addItem(File file) async {
     _itemId = (itemNum + 1).toString();
     var request = http.MultipartRequest(
-        'POST', Uri.parse('http://192.168.1.5:4001/diary-server/item'));
+        'POST', Uri.parse('http://$_host:4001/diary-server/item'));
 
     // 添加文件
     request.files.add(await http.MultipartFile.fromPath('file', file.path));
@@ -395,8 +393,8 @@ class _ItemPageState extends State<ItemPage> {
   }
 
   Future<void> updateItem(Item item, File file) async {
-    var request = http.MultipartRequest('PUT',
-        Uri.parse('http://192.168.1.5:4001/diary-server/item/updateItem'));
+    var request = http.MultipartRequest(
+        'PUT', Uri.parse('http://$_host:4001/diary-server/item/updateItem'));
     request.files.add(await http.MultipartFile.fromPath('file', _path));
     request.fields['itemId'] = item.itemId;
     request.fields['itemName'] = _itemName;

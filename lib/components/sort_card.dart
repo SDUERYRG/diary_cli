@@ -1,12 +1,12 @@
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:flutter/material.dart';
 
-class MainCard extends StatefulWidget {
+class SortCard extends StatefulWidget {
   final String itemId;
   final String itemName;
   final Function onPressed;
   final double price;
-  MainCard({
+  SortCard({
     Key? key,
     required this.itemId,
     required this.itemName,
@@ -14,15 +14,15 @@ class MainCard extends StatefulWidget {
     required this.price,
   }) : super(key: key);
   @override
-  _MainCardState createState() => _MainCardState();
+  _SortCardState createState() => _SortCardState();
 }
 
-class _MainCardState extends State<MainCard> {
+class _SortCardState extends State<SortCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
-      height: MediaQuery.of(context).size.height * 0.4,
+      width: MediaQuery.of(context).size.width * 0.1,
+      height: MediaQuery.of(context).size.height * 0.1,
       decoration: BoxDecoration(
         color: FlutterFlowTheme.of(context).secondaryBackground,
         borderRadius: BorderRadius.circular(10),
@@ -32,12 +32,12 @@ class _MainCardState extends State<MainCard> {
           Image(
             image: AssetImage('assets/itemImage/photo${widget.itemId}.jpg'),
             fit: BoxFit.fill,
-            width: MediaQuery.of(context).size.width * 0.4 + 20,
-            height: MediaQuery.of(context).size.width * 0.4,
+            width: 90,
+            height: 90,
           ),
           Positioned(
-            left: 5,
-            bottom: 30,
+            left: 100,
+            top: 10,
             child: Text(
               widget.itemName,
               style: TextStyle(
@@ -48,7 +48,7 @@ class _MainCardState extends State<MainCard> {
             ),
           ),
           Positioned(
-            left: 5,
+            left: 100,
             bottom: 10,
             child: Text(
               widget.price.toString(),

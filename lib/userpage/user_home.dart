@@ -2,6 +2,7 @@ import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/userpage/cartPage.dart';
 import 'package:diary_cli/userpage/home_page.dart';
 import 'package:diary_cli/userpage/user_info_page.dart';
+import 'package:diary_cli/userpage/user_sort.dart';
 import 'package:flutter/material.dart';
 import 'package:diary_cli/components/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,7 @@ class _UserHomeState extends State<UserHome>
       case UserSelectedScreen.catogaries:
         {
           isCart = false;
-          return Text("页面2");
+          return UserSort();
         }
       case UserSelectedScreen.order:
         {
