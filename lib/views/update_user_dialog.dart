@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:diary_cli/entity/User.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,7 @@ class UpdateUserDialog extends StatefulWidget {
 }
 
 class _UpdateUserDialogState extends State<UpdateUserDialog> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late String _userName;
   late String _account;
   late String _email;

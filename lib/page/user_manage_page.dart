@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/User.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,7 @@ class UserManagePage extends StatefulWidget {
 
 class _UserManagePageState extends State<UserManagePage> {
   late Future<List<User>> futureUsers;
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   String _userId = '';
   String _userName = '';
   String _account = '';

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:diary_cli/host.dart';
 import 'package:diary_cli/page/main_page.dart';
 import 'package:diary_cli/userpage/MainPage.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   final _formKey = GlobalKey<FormState>();
   String _power = '用户';
   late String _password, _account;
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: const InputDecoration(labelText: '账号'),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return '请输入邮箱';
+                              return '请输入账号';
                             }
                             _account = value;
                             return null;
@@ -143,21 +144,21 @@ class _LoginPageState extends State<LoginPage> {
                             return null;
                           },
                         ),
-                        DropdownButtonFormField<String>(
-                          decoration: InputDecoration(labelText: '用户权限'),
-                          value: _power,
-                          items: <String>['用户', '管理员'].map((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              _power = '用户';
-                            });
-                          },
-                        ),
+                        // DropdownButtonFormField<String>(
+                        //   decoration: InputDecoration(labelText: '用户权限'),
+                        //   value: _power,
+                        //   items: <String>['用户', '管理员'].map((String value) {
+                        //     return DropdownMenuItem<String>(
+                        //       value: value,
+                        //       child: Text(value),
+                        //     );
+                        //   }).toList(),
+                        //   onChanged: (value) {
+                        //     setState(() {
+                        //       _power = '用户';
+                        //     });
+                        //   },
+                        // ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

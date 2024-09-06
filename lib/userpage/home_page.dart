@@ -4,6 +4,7 @@ import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/components/main_card.dart';
 import 'package:diary_cli/entity/Item.dart';
+import 'package:diary_cli/host.dart';
 import 'package:diary_cli/userpage/flutter_flow_model.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -17,7 +18,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late HomePageModel _model;
   late Future<List<Item>> futureItems;
   int itemNum = 0;
@@ -97,16 +98,7 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/31/4bc66f7fbada38e2560d8542bbaa21aa.jpeg',
-                      width: 300.0,
-                      height: 200.0,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8.0),
-                    child: Image.network(
-                      'https://ice.frostsky.com/2024/08/31/89760d4213644de3ea50874f217fa54b.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/b79ac4b45d4f4593e54494afa5c100ca.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,
@@ -124,7 +116,16 @@ class _HomePageState extends State<HomePage> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8.0),
                     child: Image.network(
-                      'https://ice.frostsky.com/2024/08/31/b79ac4b45d4f4593e54494afa5c100ca.jpeg',
+                      'https://ice.frostsky.com/2024/08/31/89760d4213644de3ea50874f217fa54b.jpeg',
+                      width: 300.0,
+                      height: 200.0,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      'https://ice.frostsky.com/2024/08/31/4bc66f7fbada38e2560d8542bbaa21aa.jpeg',
                       width: 300.0,
                       height: 200.0,
                       fit: BoxFit.cover,

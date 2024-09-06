@@ -1,3 +1,4 @@
+import 'package:diary_cli/host.dart';
 import 'package:http/http.dart' as http;
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
@@ -21,7 +22,7 @@ class CartCard extends StatefulWidget {
 }
 
 class _CartCardState extends State<CartCard> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   bool checked = false;
   late String itemId;
   String image = '';

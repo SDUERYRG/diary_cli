@@ -4,6 +4,7 @@ import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/Order.dart';
 import 'package:diary_cli/entity/OrderItem.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,7 +17,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late Future<List<Order>> futureOrders;
   late Future<OrderItem> futureOrderItems;
   @override
@@ -136,28 +137,28 @@ class _OrderPageState extends State<OrderPage> {
                                 flex: 4,
                                 child: Text("订单管理"),
                               ),
-                              Expanded(
-                                flex: 4,
-                                child: TextFormField(
-                                  onChanged: (value) {},
-                                  decoration: const InputDecoration(
-                                    labelText: "请输入商品名称",
-                                    border: OutlineInputBorder(),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                    onPressed: () {}, child: const Text("查询")),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text("添加"),
-                                ),
-                              ),
+                              // Expanded(
+                              //   flex: 4,
+                              //   child: TextFormField(
+                              //     onChanged: (value) {},
+                              //     decoration: const InputDecoration(
+                              //       labelText: "请输入商品名称",
+                              //       border: OutlineInputBorder(),
+                              //     ),
+                              //   ),
+                              // ),
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: ElevatedButton(
+                              //       onPressed: () {}, child: const Text("查询")),
+                              // ),
+                              // Expanded(
+                              //   flex: 1,
+                              //   child: ElevatedButton(
+                              //     onPressed: () {},
+                              //     child: const Text("添加"),
+                              //   ),
+                              // ),
                             ],
                           ),
                           SizedBox(

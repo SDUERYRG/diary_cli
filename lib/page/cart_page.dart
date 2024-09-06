@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/ShoppingCart.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +18,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage> {
   late Future<List<ShoppingCart>> futureCart;
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   int cartNum = 0;
   String _searchByUser = '';
   String _searchByItem = '';

@@ -2,6 +2,7 @@ import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/entity/Order.dart';
 import 'package:diary_cli/entity/OrderItem.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,7 +14,7 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late Future<OrderItem> futureOrderItems;
   ThemeMode themeMode = ThemeMode.system;
   bool get useLightMode {
@@ -32,6 +33,7 @@ class _OrderPageState extends State<OrderPage> {
   void initState() {
     super.initState();
     fetchOrders(0, 100);
+    // fetchOrdersByTime();
   }
 
   Future<OrderItem> fetchOrderItem(String orderId, String orderNum) async {
@@ -105,6 +107,56 @@ class _OrderPageState extends State<OrderPage> {
     }
   }
 
+  Future<List<Order>> fetchOrdersByTime() async {
+    final userId = SharedPre.getUserId();
+    final url = Uri.parse(
+        'http://$_host:4001/diary-server/user/order/getOrderByTime/$userId');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': SharedPre.getToken().toString(),
+      },
+    );
+    final responseBody = json.decode(response.body);
+    if (responseBody['status'] == true) {
+      // 处理数据
+      print(responseBody);
+      final List<dynamic> data = responseBody['data']['records'];
+      print('获取成功');
+
+      return data.map((json) => Order.fromJson(json)).toList();
+    } else {
+      // 处理错误
+      print('请求失败，状态码：${response.statusCode}');
+      throw Exception('请求失败，状态码：${response.statusCode}');
+    }
+  }
+
+  Future<void> recieve(String orderId) async {
+    final url = Uri.parse(
+        'http://$_host:4001/diary-server/user/order/orderReceipt/$orderId');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'token': SharedPre.getToken().toString(),
+      },
+    );
+
+    print(response.body);
+    final responseBody = json.decode(response.body);
+    if (responseBody['status'] == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('签收成功')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('签收失败')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Theme(
@@ -117,6 +169,7 @@ class _OrderPageState extends State<OrderPage> {
           ),
           body: FutureBuilder(
             future: fetchOrders(0, 100),
+            // future: fetchOrdersByTime(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -140,7 +193,28 @@ class _OrderPageState extends State<OrderPage> {
                     return ListTile(
                       title: Text(order.orderNum),
                       subtitle: Text(formattedOrderTime),
-                      trailing: Text(order.state),
+                      // trailing: Text(order.state),
+                      trailing: Expanded(
+                        child: Container(
+                          width: 100,
+                          height: 40,
+                          // decoration: BoxDecoration(color: Colors.black),
+                          child: Row(
+                            children: [
+                              Text(order.state),
+                              Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 0, 0)),
+                              TextButton(
+                                  onPressed: () async {
+                                    await recieve(order.orderId);
+                                    setState(() {});
+                                  },
+                                  child: Text('签收'))
+                            ],
+                          ),
+                        ),
+                      ),
                       onTap: () {
                         futureOrderItems = fetchOrderItem(
                             order.orderId, order.orderNum.toString());

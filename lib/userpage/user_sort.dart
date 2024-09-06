@@ -5,6 +5,7 @@ import 'package:diary_cli/components/flutter_flow_theme.dart';
 import 'package:diary_cli/components/main_card.dart';
 import 'package:diary_cli/components/sort_card.dart';
 import 'package:diary_cli/entity/Item.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -15,7 +16,7 @@ class UserSort extends StatefulWidget {
 
 class _UserSortState extends State<UserSort> {
   int selectedIndex = 0;
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late Future<List<Item>> futureItems;
 
   @override

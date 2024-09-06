@@ -1,5 +1,6 @@
 import 'package:diary_cli/components/button.dart';
 import 'package:diary_cli/components/flutter_flow_theme.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,7 +10,7 @@ class UserInfoPage extends StatefulWidget {
 }
 
 class _UserInfoPageState extends State<UserInfoPage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   Future<void> logout() async {
     final url = Uri.parse('http://$_host:4001/diary-server//logout');
     final response = await http.get(url);

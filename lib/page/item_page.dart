@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:diary_cli/entity/Item.dart';
 import 'package:diary_cli/components/constants.dart';
+import 'package:diary_cli/host.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ class ItemPage extends StatefulWidget {
 }
 
 class _ItemPageState extends State<ItemPage> {
-  String _host = '192.168.160.32';
+  String _host = Host.host;
   late Future<List<Item>> futureItems;
   String _itemId = '';
   String _itemName = '';

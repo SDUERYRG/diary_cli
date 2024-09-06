@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:diary_cli/SharedPre.dart';
 import 'package:diary_cli/components/constants.dart';
 import 'package:diary_cli/entity/Sort.dart';
+import 'package:diary_cli/host.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,8 +13,8 @@ class SortPage extends StatefulWidget {
 }
 
 class _SortPageState extends State<SortPage> {
-  String _host = '192.168.160.32';
-  String _searchUserName = '';
+  String _host = Host.host;
+  String _searchSortName = '';
   late Future<List<Sort>> futureSorts;
   String _sortId = '';
   String _sortName = '';
@@ -44,6 +45,28 @@ class _SortPageState extends State<SortPage> {
     } catch (e) {
       print(e);
       throw Exception('Failed to load sort');
+    }
+  }
+
+  Future<List<Sort>> fetchSortByName(String sortName) async {
+    final header = {
+      'token': SharedPre.getToken().toString(),
+    };
+    final url = Uri.parse(
+        'http://$_host:4001/diary-server/sort/selectItemBySortName/$sortName');
+
+    print('asdasdasd');
+    final response = await http.get(url, headers: header);
+
+    final responseBody = jsonDecode(response.body);
+    print(response.body);
+    if (responseBody['status'] == true) {
+      final responseBody = jsonDecode(response.body);
+      final List<dynamic> data = responseBody['data']['records'];
+      print('获取到data');
+      return data.map((json) => Sort.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load sort1');
     }
   }
 
@@ -145,31 +168,32 @@ class _SortPageState extends State<SortPage> {
                                 child: const Text('分类管理'),
                               ),
                             ),
-                            Expanded(
-                              flex: 2,
-                              child: TextFormField(
-                                initialValue: _searchUserName,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _searchUserName = value;
-                                  });
-                                },
-                                decoration: const InputDecoration(
-                                  labelText: '请输入分类名',
-                                  border: OutlineInputBorder(),
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  // setState(() {
-                                  //   futureUsers = fetchUsers(1, 10);
-                                  // });
-                                },
-                                child: const Text('搜索'),
-                              ),
-                            ),
+                            // Expanded(
+                            //   flex: 2,
+                            //   child: TextFormField(
+                            //     initialValue: _searchSortName,
+                            //     onChanged: (value) {
+                            //       setState(() {
+                            //         _searchSortName = value;
+                            //       });
+                            //     },
+                            //     decoration: const InputDecoration(
+                            //       labelText: '请输入分类名',
+                            //       border: OutlineInputBorder(),
+                            //     ),
+                            //   ),
+                            // ),
+                            // Expanded(
+                            //   child: ElevatedButton(
+                            //     onPressed: () {
+                            //       setState(() {
+                            //         futureSorts =
+                            //             fetchSortByName(_searchSortName);
+                            //       });
+                            //     },
+                            //     child: const Text('搜索'),
+                            //   ),
+                            // ),
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
